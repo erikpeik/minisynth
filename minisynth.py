@@ -1,17 +1,18 @@
 import pygame
-import numpy
+import numpy as np
 import sys
 
-def synth(frequency, duration, sampling_rate=44100):
-	frames = int(duration * sampling_rate)
-	arr = numpy.cos(2 * numpy.pi * frequency * numpy.linspace(0, duration, frames))
-	sound = numpy.asarray([32767 * arr, 23767 * arr]).T.astype(numpy.int16)
+SAMPLERATE = 44100
+
+def synth(frequency, duration):
+	arr = np.sin(2 * np.pi * np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE)
+	sound = np.asarray([32767 * arr, 23767 * arr]).T.astype(np.int16)
 	sound = pygame.sndarray.make_sound(sound.copy())
 	return sound
 
 if (len(sys.argv) > 1):
 	pygame.init()
-	#pygame.mixer.init()
+	pygame.mixer.init(channels=1)
 	screen = pygame.display.set_mode([500, 500])
 	font = pygame.font.SysFont('Comic Sans MS', 30)
 	pygame.display.set_caption('minisynth')
@@ -58,24 +59,11 @@ if (len(sys.argv) > 1):
 		"r" : 0
 	}
 
-
-
-#	samples = {}
-
-#	for key in noteFreqs:
-#		samples[key] = synth(noteFreqs[key], 0.1, 44100)
-#		samples[key].fadeout(100)
-
 	tracks = []
-	#print(sys.argv[1])
 	f = open(sys.argv[1])
 	for line in f.readlines():
-		#print(line)
-	#	print(len(line))
 		if line[0] != '#' and len(line) > 1:
 			line = line.split()
-#			print(line)
-		#	line[0].replace(":", "")
 			if line[0] == "tempo":
 				bpm = int(line[1])
 				beat = float(1 / (bpm / 60))
@@ -90,22 +78,11 @@ if (len(sys.argv) > 1):
 					track.append(note)
 				tracks.append(track)
 
-	print(tracks)
-
+#	print(tracks)
 
 	for note in tracks[0]:
-		synth(noteFreqs[note[0]], float(note[1]) * beat, 44100).play()
+		synth(noteFreqs[note[0]], float(note[1]) * beat).play(0)
 		pygame.time.wait(int((float(note[1]) * beat) * 1000))
-
-
-
-#	for key in noteFreqs:
-#		text = font.render(key, False,(255,255,255))
-#		screen.fill((0,0,0))
-#		screen.blit(text, (250 - text.get_width() / 2, 250 - text.get_height() / 2))
-#		pygame.display.flip()
-#		samples[key].play()
-#		pygame.time.wait(100)
 
 	running = True
 	while running:
