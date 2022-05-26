@@ -94,7 +94,7 @@ def synth(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	if wave == 'saw':
 		arr = 2.0 * ((range + 0.5) % 1.0) - 1.0 # saw
 	if wave == 'square':
-		arr = np.cos(2 * np.pi * range)
+		arr = np.array([1 if floor(2 * t) % 2 == 0 else 0 for t in range])
 	if wave == 'triangle':
 		arr = 1 - np.abs(range % 4) - 2
 	return arr
