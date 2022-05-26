@@ -81,8 +81,10 @@ def synth(frequency, duration):
 
 def play_track(track, beat):
 	for note in track:
-		synth(noteFreqs[note[0]], float(note[1]) * beat).play(0)
-		pygame.time.wait(int((float(note[1]) * beat) * 1000))
+		if len(note) >= 2:
+			noteDuration = float(note[1])
+		synth(noteFreqs[note[0]], noteDuration * beat).play(0)
+		pygame.time.wait(int((noteDuration * beat) * 1000))
 
 # freeze_support()
 
