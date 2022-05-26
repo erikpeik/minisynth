@@ -32,7 +32,9 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 pygame.init()
 
-
+#screen = pygame.display.set_mode([500, 500])
+#font = pygame.font.SysFont('Comic Sans MS', 32)
+#pygame.display.set_caption('minisynth')
 #/	Note frequencies converted to global variables.
 #/	The names correspond to the western notation with "r" representing "rest".
 
@@ -106,11 +108,13 @@ def square_wave(frequency, duration):
 
 def synth(frequency=440.0, duration=1.0, wave='sine', vol=1.0):
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
-	multiplier = int(frequency * duration)
 	if frequency != 0:
+		multiplier = int(frequency * duration)
 		duration = max(1, int(float(pb_freq) / frequency * multiplier))
 	else:
-		duration = max(1, 0)
+		multiplier = int(20 * duration)
+		duration = max(1, int(float(pb_freq) / 20 * multiplier))
+		vol = 0
 	lin = np.linspace(0.0, multiplier, duration, endpoint=False)
 	if wave == 'sine':
 		arr = np.sin(lin * 2 * np.pi)
@@ -120,30 +124,48 @@ def synth(frequency=440.0, duration=1.0, wave='sine', vol=1.0):
 		arr = np.zeros(duration)
 		arr[lin % 1.0 < 0.5] = 1.0
 		arr[lin % 1.0 >= 0.5] = -1.0
-	if pb_chns == 2:
-		arr = np.repeat(arr[..., np.newaxis], 2, axis=1)
-	if pb_bits == 8:
-		snd_arr = arr * vol * 127.0
-		return pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
-	elif pb_bits == -16:
-		snd_arr = arr * vol * float((1 << 15) - 1)
-		return pygame.sndarray.make_sound(snd_arr.astype(np.int16))
+	#if pb_chns == 2:
+	#	arr = np.repeat(arr[..., np.newaxis], 2, axis=1)
+	#if pb_bits == 8:
+	#	snd_arr = arr * vol * 127.0
+	#	return pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
+	#elif pb_bits == -16:
+	#	snd_arr = arr * vol * float((1 << 15) - 1)
+	#	return pygame.sndarray.make_sound(snd_arr.astype(np.int16))
+	return arr
 
-def play_track(track, beat):
+def play_track(track, beat, vol=0.6):
+	dur = 0
+	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
+	s = np.zeros(0)
 	for note in track:
 		if len(note) >= 2:
 			noteDuration = float(note[1])
-		s = synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.5)
-		s.set_volume(0.6)
-		s.play()
-		pygame.time.wait(int((noteDuration * beat) * 1000))
+		#if (s):
+		s = np.append(s, (synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.5)))
+		#else:
+		dur += noteDuration * beat
+		#	s = synth(noteFreqs[note[0]], noteDuration * beat, 'square', 0.5)
+		if note[0] != "r":
+			print(note[0])
+		#s.set_volume(0.6)
+		# s.play()
+#		pygame.time.wait(int((noteDuration * beat) * 1000))
+#	print(s)
+	if pb_chns == 2:
+		s = np.repeat(s[..., np.newaxis], 2, axis=1)
+	if pb_bits == 8:
+		snd_arr = s * vol * 127.0
+		sound = pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
+	elif pb_bits == -16:
+		snd_arr = s * vol * float((1 << 15) - 1)
+		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
+	print(sound)
+	sound.play()
+	pygame.time.wait(int(dur) * 1000)
 
 def main():
 	if (len(sys.argv) > 1):
-#		screen = pygame.display.set_mode([500, 500])
-#		font = pygame.font.SysFont('Comic Sans MS', 30)
-#		pygame.display.set_caption('minisynth')
-#		screen.fill((0,0,0))
 
 		tracks = []
 		f = open(sys.argv[1])
@@ -170,13 +192,13 @@ def main():
 			processes.append(p)
 			p.start()
 
-#		running = True
-#		while running:
-#			for event in pygame.event.get():
-#				if event.type == pygame.QUIT:
-#					running = False
-#				if event.type == pygame.KEYDOWN:
-#					running = False
+		running = True
+		while running:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					running = False
+				if event.type == pygame.KEYDOWN:
+					running = False
 		for p in processes:
 			p.join()
 			p.terminate()
