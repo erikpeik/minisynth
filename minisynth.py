@@ -18,23 +18,28 @@
 
 from asyncio import SafeChildWatcher
 from audioop import mul
+import math
 from operator import length_hint
 import pygame
 import numpy as np
 import sys
 import threading
 from multiprocessing import Process
+from math import floor
+from datetime import datetime
 
-np.seterr(divide='ignore', invalid='ignore')
+np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
 SAMPLERATE = 44100
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
+pygame.mixer.set_num_channels(24)
 pygame.init()
 
 #screen = pygame.display.set_mode([500, 500])
 #font = pygame.font.SysFont('Comic Sans MS', 32)
 #pygame.display.set_caption('minisynth')
+
 #/	Note frequencies converted to global variables.
 #/	The names correspond to the western notation with "r" representing "rest".
 
@@ -79,59 +84,19 @@ noteFreqs = {
 	"r" : 0
 }
 
-
-
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
 
-""" def synth(frequency, duration):
-	arr = np.sin(2 * np.pi * np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE)
-	sound = np.asarray([32767 * arr, 32767 * arr]).T.astype(np.int16)
-	sound = pygame.sndarray.make_sound(sound.copy())
-	return sound """
-
-def square_wave(frequency, duration):
-	num_steps = int(duration * SAMPLERATE)
-	s = []
-	length_of_plateau = int(44100 / (2 * frequency))
-	counter = 0
-	state = 1
-	for n in range(num_steps):
-		s.append(state)
-		counter += 1
-		if counter == length_of_plateau:
-			counter = 0
-			state *= -1
-	sound = np.asarray([32767 * s, 32767 * s]).T.astype(np.int16)
-	sound = pygame.sndarray.make_sound(sound.copy())
-	return sound
-
-
-def synth(frequency=440.0, duration=1.0, wave='sine', vol=1.0):
+def synth(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
-	if frequency != 0:
-		multiplier = int(frequency * duration)
-		duration = max(1, int(float(pb_freq) / frequency * multiplier))
-	else:
-		multiplier = int(20 * duration)
-		duration = max(1, int(float(pb_freq) / 20 * multiplier))
-		vol = 0
-	lin = np.linspace(0.0, multiplier, duration, endpoint=False)
+	range = np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE
 	if wave == 'sine':
-		arr = np.sin(lin * 2 * np.pi)
+		arr = np.sin(2 * np.pi * range)
 	if wave == 'saw':
-		arr = 2.0 * ((lin + 0.5) % 1.0) - 1.0 # saw
+		arr = 2.0 * ((range + 0.5) % 1.0) - 1.0 # saw
 	if wave == 'square':
-		arr = np.zeros(duration)
-		arr[lin % 1.0 < 0.5] = 1.0
-		arr[lin % 1.0 >= 0.5] = -1.0
-	#if pb_chns == 2:
-	#	arr = np.repeat(arr[..., np.newaxis], 2, axis=1)
-	#if pb_bits == 8:
-	#	snd_arr = arr * vol * 127.0
-	#	return pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
-	#elif pb_bits == -16:
-	#	snd_arr = arr * vol * float((1 << 15) - 1)
-	#	return pygame.sndarray.make_sound(snd_arr.astype(np.int16))
+		arr = np.cos(2 * np.pi * range)
+	if wave == 'triangle':
+		arr = 1 - np.abs(range % 4) - 2
 	return arr
 
 def play_track(track, beat, track_count, vol=0.6):
@@ -141,7 +106,7 @@ def play_track(track, beat, track_count, vol=0.6):
 	for note in track:
 		if len(note) >= 2:
 			noteDuration = float(note[1])
-		s = np.append(s, (synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.5)))
+		s = np.append(s, (synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.01)))
 		dur += noteDuration * beat
 
 	if pb_chns == 2:
@@ -165,7 +130,7 @@ def main():
 				line = line.split()
 				if line[0] == "tempo":
 					bpm = int(line[1])
-					beat = float(1 / (bpm / 60))
+					beat = float(60 / bpm)
 				elif line[0] == "tracks":
 					# do something later
 					print()
@@ -185,9 +150,15 @@ def main():
 			playable_tracks.append(p)
 
 		print("All tracks is made! Enjoy music.")
-
+		count = 1
 		for track in playable_tracks:
+			pygame.mixer.Sound.set_volume(track, 0.1)
+			print("Starting track " + str(count) + " - " + str(datetime.now()))
 			track.play()
+			count += 1
+
+#		p = play_track(tracks[0], beat, count)
+#		p.play()
 
 		running = True
 		while running:
