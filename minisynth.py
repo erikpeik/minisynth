@@ -1,3 +1,19 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    minisynth.py                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: emende & aviholai                          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/05/25 11:07:02 by emende            #+#    #+#              #
+#                                                     ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+#/	The goal of the assignment is to create a synthesizer tool called
+#/	"Minisynth" that reads and plays a musical "sheet" in a '.synth'
+#/	extension.
+
 import pygame
 import numpy as np
 import sys
@@ -8,6 +24,9 @@ SAMPLERATE = 44100
 
 pygame.init()
 pygame.mixer.init(channels=1)
+
+#/	Note frequencies converted to global variables.
+#/	The names correspond to the western notation with "r" representing "rest".
 
 noteFreqs = {
 	"c0" : 16.35, "c#0" : 17.32, "db0" : 17.32, "d0" : 18.35, "d#0" : 19.45,
@@ -49,6 +68,8 @@ noteFreqs = {
 
 	"r" : 0
 }
+
+#/	The math processing for the synthesis of the sound wave, duration and frequency.
 
 def synth(frequency, duration):
 	arr = np.sin(2 * np.pi * np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE)
