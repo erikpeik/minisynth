@@ -24,8 +24,9 @@ from multiprocessing import Process
 
 SAMPLERATE = 44100
 
+pygame.mixer.init(size=-16)
 pygame.init()
-pygame.mixer.init(channels=1)
+
 
 #/	Note frequencies converted to global variables.
 #/	The names correspond to the western notation with "r" representing "rest".
@@ -73,9 +74,19 @@ noteFreqs = {
 
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
 
-def synth(frequency, duration):
+""" def synth(frequency, duration):
 	arr = np.sin(2 * np.pi * np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE)
-	sound = np.asarray([32767 * arr, 23767 * arr]).T.astype(np.int16)
+	sound = np.asarray([32767 * arr, 32767 * arr]).T.astype(np.int16)
+	sound = pygame.sndarray.make_sound(sound.copy())
+	return sound """
+
+def synth(frequency, duration, wave):
+	if wave == 'sine':
+		arr = np.sin(2 * np.pi * np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE)
+#	if wave == 'square':
+#		arr = [i for i in [[1,-1][i%2] for i in range(int(frequency / 2))] for ff in range(int((duration * SAMPLERATE)/int(frequency / 2)))]
+	sound = np.asarray([32767 * arr, 32767 * arr]).T.astype(np.int16)
+	print("array: " + str(len(sound)))
 	sound = pygame.sndarray.make_sound(sound.copy())
 	return sound
 
@@ -83,7 +94,7 @@ def play_track(track, beat):
 	for note in track:
 		if len(note) >= 2:
 			noteDuration = float(note[1])
-		synth(noteFreqs[note[0]], noteDuration * beat).play(0)
+		synth(noteFreqs[note[0]], noteDuration * beat, 'sine').play(0)
 		pygame.time.wait(int((noteDuration * beat) * 1000))
 
 # freeze_support()
@@ -116,8 +127,11 @@ def main():
 
 	#	print(tracks)
 
+		processes = []
 		for track in tracks:
-			Process(target=play_track, args=(track, beat, )).start()
+			p = Process(target=play_track, args=(track, beat, ))
+			processes.append(p)
+			p.start()
 
 		running = True
 		while running:
@@ -125,7 +139,11 @@ def main():
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					running = False
-
+				if event.type == pygame.KEYDOWN:
+					running = False
+		for p in processes:
+			p.join()
+			p.terminate()
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
