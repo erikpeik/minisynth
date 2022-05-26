@@ -134,24 +134,16 @@ def synth(frequency=440.0, duration=1.0, wave='sine', vol=1.0):
 	#	return pygame.sndarray.make_sound(snd_arr.astype(np.int16))
 	return arr
 
-def play_track(track, beat, vol=0.6):
+def play_track(track, beat, track_count, vol=0.6):
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
 	for note in track:
 		if len(note) >= 2:
 			noteDuration = float(note[1])
-		#if (s):
 		s = np.append(s, (synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.5)))
-		#else:
 		dur += noteDuration * beat
-		#	s = synth(noteFreqs[note[0]], noteDuration * beat, 'square', 0.5)
-		if note[0] != "r":
-			print(note[0])
-		#s.set_volume(0.6)
-		# s.play()
-#		pygame.time.wait(int((noteDuration * beat) * 1000))
-#	print(s)
+
 	if pb_chns == 2:
 		s = np.repeat(s[..., np.newaxis], 2, axis=1)
 	if pb_bits == 8:
@@ -160,9 +152,8 @@ def play_track(track, beat, vol=0.6):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print(sound)
-	sound.play()
-	pygame.time.wait(int(dur) * 1000)
+	print("Track " + str(track_count) + " is created...")
+	return sound
 
 def main():
 	if (len(sys.argv) > 1):
@@ -186,11 +177,17 @@ def main():
 						track.append(note)
 					tracks.append(track)
 
-		processes = []
+		playable_tracks = []
+		count = 1
 		for track in tracks:
-			p = Process(target=play_track, args=(track, beat, ))
-			processes.append(p)
-			p.start()
+			p = play_track(track, beat, count)
+			count += 1
+			playable_tracks.append(p)
+
+		print("All tracks is made! Enjoy music.")
+
+		for track in playable_tracks:
+			track.play()
 
 		running = True
 		while running:
@@ -199,9 +196,6 @@ def main():
 					running = False
 				if event.type == pygame.KEYDOWN:
 					running = False
-		for p in processes:
-			p.join()
-			p.terminate()
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
