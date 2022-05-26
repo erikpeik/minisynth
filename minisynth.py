@@ -13,6 +13,8 @@
 #/	The goal of the assignment is to create a synthesizer tool called
 #/	"Minisynth" that reads and plays a musical "sheet" in a '.synth'
 #/	extension.
+#/	The synthesizer runs in a 'pygame' engine and also requires the libraries
+#/	'numpy', 'sys', 'threading' and 'multiprocessing'.
 
 import pygame
 import numpy as np
