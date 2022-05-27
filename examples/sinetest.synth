@@ -1,4 +1,7 @@
 tempo 60
-tracks sine
+tracks sine,saw,square,triangle
 
-1: a#4/5
+1: a4/2
+2: r/3 a4/2
+3: r/6 a4/2
+4: r/9 a4/2
