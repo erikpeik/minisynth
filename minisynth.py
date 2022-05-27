@@ -93,7 +93,6 @@ def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	return arr
 
 def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
-	#print(wave)
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
@@ -154,11 +153,7 @@ def main():
 		for note_track in compiled_tracks:
 			pygame.mixer.Sound.set_volume(note_track, 0.7)
 			pygame.mixer.find_channel(True).play(note_track)
-#			note_track.play()
 			count += 1
-
-#		p = parse_sheet(tracks[0], beat, count)
-#		p.play()
 
 		running = True
 		while running:
