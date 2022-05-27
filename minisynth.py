@@ -19,7 +19,6 @@ import os, sys, math
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 import pygame
 import numpy as np
-import threading
 from multiprocessing.pool import ThreadPool as Pool
 
 np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
@@ -118,6 +117,10 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 
 compiled_tracks = []
 
+def play_track(note_track, vol=0.7):
+	pygame.mixer.Sound.set_volume(note_track, 0.7)
+	pygame.mixer.find_channel(True).play(note_track)
+
 def main():
 	if (len(sys.argv) > 1):
 
@@ -148,12 +151,14 @@ def main():
 		pool.join()
 
 		print("𝘼𝙡𝙡 𝙩𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
-		count = 1
 		pygame.mixer.fadeout(1000)
+
+		pool_size = len(tracks)
+		track_pool = Pool(pool_size)
 		for note_track in compiled_tracks:
-			pygame.mixer.Sound.set_volume(note_track, 0.7)
-			pygame.mixer.find_channel(True).play(note_track)
-			count += 1
+			track_pool.apply_async(play_track, (note_track,))
+		track_pool.close()
+		track_pool.join()
 
 		running = True
 		while running:
