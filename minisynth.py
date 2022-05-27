@@ -205,6 +205,7 @@ def main():
 		track_pool.close()
 		track_pool.join()
 
+		# Loop for pygame, waiting for your escape
 		running = True
 		while running:
 			update_screen()
