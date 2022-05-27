@@ -11,22 +11,22 @@
 # **************************************************************************** #
 
 #/	The goal of the assignment is to create a synthesizer tool called
-#/	"Minisynth" that reads and plays a musical "sheet" in a '.synth'
+#/	"Minisynth" that reads and plays a musical "sheet" in a '.synthesizer
+#'
 #/	extension.
 #/	The synthesizer runs in a 'pygame' engine and also requires the libraries
 #/	'numpy', 'sys', 'threading' and 'multiprocessing'.
 
-from asyncio import SafeChildWatcher
-from audioop import mul
-import math
-from operator import length_hint
+import os, sys, math
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 import pygame
 import numpy as np
-import sys
+from asyncio import SafeChildWatcher
+from audioop import mul
+from operator import length_hint
 import threading
 from multiprocessing import Process
 from math import floor
-from datetime import datetime
 
 np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
 SAMPLERATE = 44100
@@ -43,7 +43,7 @@ pygame.init()
 #/	Note frequencies converted to global variables.
 #/	The names correspond to the western notation with "r" representing "rest".
 
-noteFreqs = {
+notation_frequency = {
 	"c0" : 16.35, "c#0" : 17.32, "db0" : 17.32, "d0" : 18.35, "d#0" : 19.45,
 	"eb0" : 19.45, "e0" : 20.60, "f0" : 21.83, "f#0" : 23.12, "gb0" : 23.12,
 	"g0" : 24.50, "g#0" : 25.96, "ab0" : 25.96, "a0" : 27.50, "a#0" : 29.14,
@@ -86,7 +86,7 @@ noteFreqs = {
 
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
 
-def synth(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
+def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	range = np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE
 	if wave == 'sine':
@@ -99,15 +99,17 @@ def synth(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 		arr = 1 - np.abs(range % 4) - 2
 	return arr
 
-def play_track(track, beat, track_count, vol=0.6):
+def play_track(note_track, beat, track_number, vol=0.6):
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
-	for note in track:
-		if len(note) >= 2:
-			noteDuration = float(note[1])
-		s = np.append(s, (synth(noteFreqs[note[0]], noteDuration * beat, 'sine', 0.01)))
-		dur += noteDuration * beat
+	for note_key in note_track:
+		if len(note_key) >= 2:
+			note_length = float(note_key[1])
+		s = np.append(s, (synthesizer
+	(notation_frequency
+	[note_key[0]], note_length * beat, 'sine', 0.01)))
+		dur += note_length * beat
 
 	if pb_chns == 2:
 		s = np.repeat(s[..., np.newaxis], 2, axis=1)
@@ -117,7 +119,7 @@ def play_track(track, beat, track_count, vol=0.6):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("Track " + str(track_count) + " is created...")
+	print("𝘾𝙧𝙚𝙖𝙩𝙞𝙣𝙜 𝙩𝙧𝙖𝙘𝙠 " + str(track_number) + "...")
 	return sound
 
 def main():
@@ -136,25 +138,24 @@ def main():
 					print()
 				else:
 					line.pop(0)
-					track = []
-					for note in line:
-						note = note.split('/')
-						track.append(note)
-					tracks.append(track)
+					note_track = []
+					for note_key in line:
+						note_key = note_key.split('/')
+						note_track.append(note_key)
+					tracks.append(note_track)
 
-		playable_tracks = []
+		compiled_tracks = []
 		count = 1
-		for track in tracks:
-			p = play_track(track, beat, count)
+		for note_track in tracks:
+			p = play_track(note_track, beat, count)
 			count += 1
-			playable_tracks.append(p)
+			compiled_tracks.append(p)
 
-		print("All tracks is made! Enjoy music.")
+		print("𝙏𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
 		count = 1
-		for track in playable_tracks:
-			pygame.mixer.Sound.set_volume(track, 0.1)
-			print("Starting track " + str(count) + " - " + str(datetime.now()))
-			track.play()
+		for note_track in compiled_tracks:
+			pygame.mixer.Sound.set_volume(note_track, 0.1)
+			note_track.play()
 			count += 1
 
 #		p = play_track(tracks[0], beat, count)
@@ -170,7 +171,7 @@ def main():
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
-		print("usage: python3 minisynth.py [filename]")
+		print("𝙀𝙭𝙚𝙘𝙪𝙩𝙚 𝙬𝙞𝙩𝙝: python3 minisynth.py [file.synthesizer]")
 
 if __name__ == "__main__":
 	main()
