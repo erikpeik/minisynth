@@ -3,3 +3,5 @@
 
 To install requirements:
 pip3 install -r requirements.txt
+
+Usage: ./minisynth /path/to/song

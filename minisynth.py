@@ -16,22 +16,16 @@
 #/	libraries.
 
 import os, sys, math
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 import pygame
 import numpy as np
-from asyncio import SafeChildWatcher
-from audioop import mul
-from operator import length_hint
-import threading
-from multiprocessing import Process
-from math import floor
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
-SAMPLERATE = 44100
 
+SAMPLERATE = 44100
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
-pygame.mixer.set_num_channels(24)
+pygame.mixer.set_num_channels(26) # Max number of tracks
 pygame.init()
 
 #screen = pygame.display.set_mode([500, 500])
@@ -85,19 +79,19 @@ notation_frequency = {
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
 
 def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
-	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	range = np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE
-	if wave == 'sine':
+	if wave == 'sine' or wave == 'kick' or wave == 'snare':
 		arr = np.sin(2 * np.pi * range)
 	if wave == 'saw':
 		arr = 2.0 * ((range + 0.5) % 1.0) - 1.0 # saw
 	if wave == 'square':
-		arr = np.array([1 if floor(2 * t) % 2 == 0 else 0 for t in range])
+		arr = np.array([1 if math.floor(2 * t) % 2 == 0 else 0 for t in range])
 	if wave == 'triangle':
 		arr = 1 - np.abs(range % 4) - 2
 	return arr
 
-def parse_sheet(note_track, beat, track_number, vol=0.6):
+def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
+	print(wave)
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
@@ -106,7 +100,7 @@ def parse_sheet(note_track, beat, track_number, vol=0.6):
 			note_length = float(note_key[1])
 		s = np.append(s, (synthesizer
 	(notation_frequency
-	[note_key[0]], note_length * beat, 'sine', 0.01)))
+	[note_key[0]], note_length * beat, wave, 0.01)))
 		dur += note_length * beat
 
 	if pb_chns == 2:
@@ -132,8 +126,7 @@ def main():
 					beats_per_minute = int(line[1])
 					beat = float(60 / beats_per_minute)
 				elif line[0] == "tracks":
-					# do something later
-					print()
+					track_instruments = line[1].split(',')
 				else:
 					line.pop(0)
 					note_track = []
@@ -143,17 +136,18 @@ def main():
 					tracks.append(note_track)
 
 		compiled_tracks = []
-		count = 1
-		for note_track in tracks:
-			p = parse_sheet(note_track, beat, count)
-			count += 1
+#		for note_track in tracks:
+		for i in range(len(tracks)):
+			p = parse_sheet(tracks[i], beat, i, 0.05, track_instruments[i])
 			compiled_tracks.append(p)
 
 		print("𝙏𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
 		count = 1
+		pygame.mixer.fadeout(1000)
 		for note_track in compiled_tracks:
-			pygame.mixer.Sound.set_volume(note_track, 0.1)
-			note_track.play()
+			pygame.mixer.Sound.set_volume(note_track, 0.7)
+			pygame.mixer.find_channel(True).play(note_track)
+#			note_track.play()
 			count += 1
 
 #		p = parse_sheet(tracks[0], beat, count)
