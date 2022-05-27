@@ -1,0 +1,101 @@
+# The Prisoner of Askaban - Lumos and Hedwigs Theme
+tempo 79
+
+tracks sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,sine,square,square,triangle,sine,sine,sine,triange,triangle,triangle,square,square,saw,saw,square,square,sine
+
+# Track  2: channel  0 (Celesta), 10 voices
+
+1: r/1 b6/0.5 e7/0.75 g/0.25 f#/0.5 e6/1.5 a7 f# e/0.75 g/0.25 f#/0.5 d#/1 b5/0.5 b6/2.5 b/0.5 e/1.5 e d8/1 c#/0.5 f7/1.5 c8/0.75 b7/0.25 a#/0.5 a#6/1 g7/0.5 e6/1 g/0.5 b/1 g7/0.5 e6/1 g7/0.5 b/1 b5/0.5 e6/1 g/0.5 a#7/1 f#/0.5 g/0.75 b/0.25 g6/0.5 c/1 b/0.5 b7/2.5 b5/0.5 e6/1 g7/0.5 b/1 g6/0.5 d8/1 c#/0.5 c/1 g#7/0.5 e6/1.5 e e7 b6/1 b5/0.5 e7/1.5 b6/1 b5/0.5 e6/0.375 f#/0.125 g a b c7 d e f# g b5/1.5 g6/0.125 a b c7 d e f# g a b c8 d e d c b7 a g f# e d c b6 a e f# g a b a g f# a b c7 d c d e f# f# g a b a g a b g6/1.5 b/0.125 c7 d c b6 a g a b a g f# b a g f# b a g f# c7 b6 a g b c7 d e f# g a b a g f# e d e f# g a b a g f# e d c e5/1.5 e7/0.125 f# g a b a g f# e f# g a b a g f# e d c d e f# g a g f# e d e f# g a b a g f# e d c b6 a g f# e b4/0.5 e6/0.125 d c b5 b6 a g f# a# g f# e e5/1.5 g6 f c8/0.125 b7 a g f# e f# g a b a g f#5/1.5 b6/0.125 c7 d e e f# g a g5/0.5 b/1 a7/0.125 g f# e e d c b6 g7 f# e d b a g f# g f# e d b a g f# e8 d c b7 e5/1 b7/0.125 a g f# f# g a# b c8 b7 a# g f# e d c e f# g a b a g f# e8 d c b7 c5/1 a#7/0.125 b c8 d e f# g f# e d c b7 a g f# e g f# e d b a g f# e8 d c b7 e d c b6 b7 a g f# a# g f# e b6 c7 a6 b c7 d e f# g a b g5/1.625 c8/0.125 a#7 g# g f e c# e f g g# a# g5/1.5 f# g6/0.125 a b c7 d e f# g a b c8 d e/0.25 
+
+2: r/1.5 e6 e7/1 b/0.5 e6/1.5 e e a#/1 f7/0.5 e6/1 g/0.5 b/1 b5/0.5 e7/0.75 g/0.25 f#/0.5 e/1 b/0.5 g/1.5 c8/1 g#7/0.5 e/1.5 f#6 e7/2.5 b5/0.5 b7/1 g6/0.5 b/1 g7/0.5 c8/1 b7/0.5 c/1 b5/0.5 e6/1 a#7/0.5 a#6/1 g/0.5 e/1 g/0.5 b/1 g7/0.5 b/1 g6/0.5 b/1 g7/0.5 d/1.5 c g6 f# e/1 g/0.5 e7/1.5 e6/1 g/0.5 e7/1.5 r/0.25 e6/1.25 a7/0.125 g f# e d c b6 a g f# e r c/1.5 f# b5 e6 c8/0.125 d e d c b7 a g f# e d c f#6/1.5 e b5 e b6/0.125 c7 d e f# g a b c8 b7 a g e5/1.5 a/1 b4/0.5 e5/1 g/0.5 b/1 b6/0.125 a g f# e5/1.5 b6/0.125 c7 a6 b c7 d e f# g a b c8 d c a#7 a g f# d# d c b6 a g c8 a#7 g# g f e c# e f g g# a# e6/1.5 f#7/0.125 e f# g a# g f# e d c b6 a# e5/1 g7/0.125 a b c8 b7 a g f# e8 d c b7 b4/0.5 e5/1 g/0.5 b/1 b4/0.5 c8/0.125 b7 a g e8 d c b7 g5/0.5 c6/1 b4/0.5 e5/1 g/0.5 a#7/0.125 b c8 d b7 a# g f# g5/0.5 e/1 g/0.5 b/1 b4/0.5 e5/1 g/0.5 b/1 g/0.5 d8/0.125 c a#7 a g f# d# d c b6 a g c/1.5 e5 e e/1 g/0.5 b/1 
+
+3: r/16.3 d6/1.7 r/1.3 c/1.7 r/19.3083 d/1.69166 r/1.5 c8/0.75 b7/0.25 a#/0.5 c#6/1.5 r/32.8 d5/1.7 r/1.3 c/1.7 r/19.3083 d/1.69166 r/1.5 c6 a#/0.125 b c7 b6 a# g f# e d e f# g r/1.5 b4/1 
+
+4: r/16.35 g6/1.65 r/1.35 e/1.65 r/19.375 g/1.625 r/1.5 c7 a#6/1 g7/0.5 r/32.85 g5/1.65 r/1.35 e/1.65 r/19.375 c8/0.125 d6/1.5 r b4 c#5 
+
+5: r/16.4 a#6/1.6 r/1.4 a/1.6 r/19.4333 a#/1.56666 r/1.5 b5 r/34.4 a#/1.6 r/1.4 a/1.6 r/19.4333 a#/1.56666 r/1.5 c8/0.125 b7 a g f# e d c b6 a# g f# 
+
+6: r/16.45 d7/1.55 r/1.45 c/1.55 r/20.8083 c6/1.69166 r/35.95 d/1.55 r/1.45 c/1.55 r/20.8083 c5/1.69166 
+
+7: r/17.8 c6/1.7 r/1.33333 c#/1.66666 r/19.375 f/1.625 r/37.3 c5/1.7 r/1.33333 c#/1.66666 r/19.375 f/1.625 
+
+8: r/17.85 f6/1.65 r/1.41666 e/1.58333 r/19.4333 g#/1.56666 r/37.35 f5/1.65 r/1.41666 e/1.58333 r/19.4333 g#/1.56666 
+
+9: r/17.9 g#6/1.6 r/61.4 g#5/1.6 
+
+10: r/17.95 c7/1.55 r/61.45 c6/1.55 
+
+# Track  3: channel  1 (Pad 5 (bowed)), 10 voices
+
+11: r/1 b6/0.5 e7/0.75 g/0.25 f#/0.5 e6/1.5 a7 f# e/0.75 g/0.25 f#/0.5 d#/1 b5/0.5 b6/2.5 b/0.5 e/1.5 e d8/1 c#/0.5 f7/1.5 c8/0.75 b7/0.25 a#/0.5 a#6/1 g7/0.5 e6/1 g/0.5 b/1 g7/0.5 e6/1 g7/0.5 b/1 b5/0.5 e6/1 g/0.5 a#7/1 f#/0.5 g/0.75 b/0.25 g6/0.5 c/1 b/0.5 b7/2.5 b5/0.5 e6/1 g7/0.5 b/1 g6/0.5 d8/1 c#/0.5 c/1 g#7/0.5 e6/1.5 e e7 b6/1 b5/0.5 e7/1.5 b6/1 b5/0.5 e6/0.375 f#/0.125 g a b c7 d e f# g b5/1.5 g6/0.125 a b c7 d e f# g a b c8 d e d c b7 a g f# e d c b6 a e f# g a b a g f# a b c7 d c d e f# f# g a b a g a b g6/1.5 b/0.125 c7 d c b6 a g a b a g f# b a g f# b a g f# c7 b6 a g b c7 d e f# g a b a g f# e d e f# g a b a g f# e d c e5/1.5 e7/0.125 f# g a b a g f# e f# g a b a g f# e d c d e f# g a g f# e d e f# g a b a g f# e d c b6 a g f# e b4/0.5 e6/0.125 d c b5 b6 a g f# a# g f# e e5/1.5 g6 f c8/0.125 b7 a g f# e f# g a b a g f#5/1.5 b6/0.125 c7 d e e f# g a g5/0.5 b/1 a7/0.125 g f# e e d c b6 g7 f# e d b a g f# g f# e d b a g f# e8 d c b7 e5/1 b7/0.125 a g f# f# g a# b c8 b7 a# g f# e d c e f# g a b a g f# e8 d c b7 c5/1 a#7/0.125 b c8 d e f# g f# e d c b7 a g f# e g f# e d b a g f# e8 d c b7 e d c b6 b7 a g f# a# g f# e b6 c7 a6 b c7 d e f# g a b g5/1.625 c8/0.125 a#7 g# g f e c# e f g g# a# g5/1.5 f# g6/0.125 a b c7 d e f# g a b c8 d e/0.25 
+
+12: r/1.5 e6 e7/1 b/0.5 e6/1.5 e e a#/1 f7/0.5 e6/1 g/0.5 b/1 b5/0.5 e7/0.75 g/0.25 f#/0.5 e/1 b/0.5 g/1.5 c8/1 g#7/0.5 e/1.5 f#6 e7/2.5 b5/0.5 b7/1 g6/0.5 b/1 g7/0.5 c8/1 b7/0.5 c/1 b5/0.5 e6/1 a#7/0.5 a#6/1 g/0.5 e/1 g/0.5 b/1 g7/0.5 b/1 g6/0.5 b/1 g7/0.5 d/1.5 c g6 f# e/1 g/0.5 e7/1.5 e6/1 g/0.5 e7/1.5 r/0.25 e6/1.25 a7/0.125 g f# e d c b6 a g f# e r c/1.5 f# b5 e6 c8/0.125 d e d c b7 a g f# e d c f#6/1.5 e b5 e b6/0.125 c7 d e f# g a b c8 b7 a g e5/1.5 a/1 b4/0.5 e5/1 g/0.5 b/1 b6/0.125 a g f# e5/1.5 b6/0.125 c7 a6 b c7 d e f# g a b c8 d c a#7 a g f# d# d c b6 a g c8 a#7 g# g f e c# e f g g# a# e6/1.5 f#7/0.125 e f# g a# g f# e d c b6 a# e5/1 g7/0.125 a b c8 b7 a g f# e8 d c b7 b4/0.5 e5/1 g/0.5 b/1 b4/0.5 c8/0.125 b7 a g e8 d c b7 g5/0.5 c6/1 b4/0.5 e5/1 g/0.5 a#7/0.125 b c8 d b7 a# g f# g5/0.5 e/1 g/0.5 b/1 b4/0.5 e5/1 g/0.5 b/1 g/0.5 d8/0.125 c a#7 a g f# d# d c b6 a g c/1.5 e5 e e/1 g/0.5 b/1 
+
+13: r/16.3 d6/1.7 r/1.3 c/1.7 r/19.3083 d/1.69166 r/1.5 c8/0.75 b7/0.25 a#/0.5 c#6/1.5 r/32.8 d5/1.7 r/1.3 c/1.7 r/19.3083 d/1.69166 r/1.5 c6 a#/0.125 b c7 b6 a# g f# e d e f# g r/1.5 b4/1 
+
+14: r/16.35 g6/1.65 r/1.35 e/1.65 r/19.375 g/1.625 r/1.5 c7 a#6/1 g7/0.5 r/32.85 g5/1.65 r/1.35 e/1.65 r/19.375 c8/0.125 d6/1.5 r b4 c#5 
+
+15: r/16.4 a#6/1.6 r/1.4 a/1.6 r/19.4333 a#/1.56666 r/1.5 b5 r/34.4 a#/1.6 r/1.4 a/1.6 r/19.4333 a#/1.56666 r/1.5 c8/0.125 b7 a g f# e d c b6 a# g f# 
+
+16: r/16.45 d7/1.55 r/1.45 c/1.55 r/20.8083 c6/1.69166 r/35.95 d/1.55 r/1.45 c/1.55 r/20.8083 c5/1.69166 
+
+17: r/17.8 c6/1.7 r/1.33333 c#/1.66666 r/19.375 f/1.625 r/37.3 c5/1.7 r/1.33333 c#/1.66666 r/19.375 f/1.625 
+
+18: r/17.85 f6/1.65 r/1.41666 e/1.58333 r/19.4333 g#/1.56666 r/37.35 f5/1.65 r/1.41666 e/1.58333 r/19.4333 g#/1.56666 
+
+19: r/17.9 g#6/1.6 r/61.4 g#5/1.6 
+
+20: r/17.95 c7/1.55 r/61.45 c6/1.55 
+
+# Track  4: channel  2 (String Ensemble 1), 2 voices
+
+21: r/25.5 e5/5 e/0.125 f# g a b a g f# e/3 r/0.5 e/0.125 f# g a b a g f# e/0.25 r e/0.125 f# g a b a g f# e/3 g/1.5 f e4 f# e5/6 r/0.25 e/0.125 f# g a b c6 d e f# g a g f# e d c b5 a g f# e r g a b c6 d e f# g a b c7 d e d c b6 a g f# e d c b5 a e f# g a b a g f# a b c6 d c d e f# f# g a b a g a b c7 d e d c b6 a g f# e d c b5 c6 d c b5 a g a b a g f# b a g f# b a g f# c6 b5 a g b c6 d e f# g a b a g f# e d e f# g a b a g f# e d c b5 c6 d e f# g a b c7 b6 a g e f# g a b a g f# e f# g a b a g f# e d c d e f# g a g f# e d e f# g a b a g f# e d c b5 a g f# e b a g f# e d c b4 b5 a g f# a# g f# e b c6 a5 b c6 d e f# g a b c7 d c a#6 a g f# d# d c b5 a g c7 a#6 g# g f e c# e f g g# a# c7 b6 a g f# e f# g a b a g f# e f# g a# g f# e d c b5 a# b c6 d e e f# g a g a b c7 b6 a g f# e7 d c b6 a g f# e e d c b5 g6 f# e d b a g f# g f# e d b a g f# e7 d c b6 c7 b6 a g e7 d c b6 b a g f# f# g a# b c7 b6 a# g f# e d c e f# g a b a g f# e7 d c b6 a# b c7 d b6 a# g f# a# b c7 d e f# g f# e d c b6 a g f# e g f# e d b a g f# e7 d c b6 e d c b5 b6 a g f# a# g f# e b5 c6 a5 b c6 d e f# g a b c7 d c a#6 a g f# d# d c b5 a g c7 a#6 g# g f e c# e f g g# a# c7 b6 a g f# e d c b5 a# g f# a# b c6 b5 a# g f# e d e f# g g a b c6 d e f# g a b c7 d e/0.25 
+
+22: r/40.5 g4/1.5 f e5 f# r/64 e4/24 
+
+# Track  5: channel  3 (Pizzicato Strings), 1 voices
+
+23: r/22.5 e5/1 r/0.5 b4/1 r/0.5 e/1 r/14.0083 a#/0.24166 d5/0.25 g/0.5 r/0.50833 c/0.24166 f/0.25 g#/0.5 r/0.50833 e/0.24166 g/0.25 c6/0.5 r/0.50833 f#5/0.24166 e/0.25 c/0.5 r/0.50833 b4/1.5 r/2.99166 b/1.5 r b r/3 b/1.5 r/4.5 e5/1.5 e e e r/15 e/1.5 g e b4 e5 c e e b4 b b/1 e5/0.5 e/1 b4/0.5 a# d5 g c f g# e g c6 f#5 e c b4/1.5 r/21.5 b2/1 e 
+
+# Track  6: channel  4 (Flute), 1 voices
+
+24: r/58.5 e5/5.5 b4/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 a/1.5 f# e/0.75 g/0.25 f#/0.5 d/1 f/0.5 b4/2.5 b/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 c6/1 b5/0.5 a#/1 f#/0.5 g/0.75 b/0.25 a#/0.5 a#4/1 b/0.5 b5/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/1.5 
+
+# Track  7: channel  5 (Clarinet), 2 voices
+
+25: r/46.5083 e5/1.5 r/15.9917 b4/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 a/1.5 f# e/0.75 g/0.25 f#/0.5 d/1 f/0.5 b4/2.5 b/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 c6/1 b5/0.5 a#/1 f#/0.5 g/0.75 b/0.25 a#/0.5 a#4/1 b/0.5 b5/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/25 
+
+26: r/48 e5/15.5 
+
+# Track  8: channel  6 (Pizzicato Strings), 1 voices
+
+27: r/90 e3/7.5 e/3 r/4 g2/0.5 f/1 f/0.5 b/1 b/0.5 c#3/1 c#/0.5 e g b2 e3/1 
+
+# Track  9: channel  7 (Pizzicato Strings), 2 voices
+
+28: r/40.5083 g3/0.24166 d4/0.25 a#/0.5 r/0.50833 f3/0.24166 c4/0.25 g#/0.5 r/0.50833 b3/0.24166 e4/0.25 g/0.5 r/0.50833 c#/0.24166 f#/0.25 a#/0.5 b r/3 e5/1.5 r e r c f#4 r e g f# e r/4.5 b/1.5 f# e b3 e4 e3 g/0.25 a# d4/1 f3/0.25 g# c4/1 a3/0.25 c4 e/1 f#3/0.25 a c#4/0.5 f# b/1.5 b e e b a# e c b3 e4 e/1 g/0.5 b/1 e/0.5 g3 d4 a# f3 c4 g# b3 e4 g c# f# a# b g b3 e4/1 
+
+29: r/85.5 e4/1.5 e5 b4 b3 e4 c b g e3 b 
+
+# Track 10: channel  8 (French Horn), 2 voices
+
+30: r/40.5083 d6/1 r/0.5 c/1 r/0.5 c/0.75 r a#4/1 r/0.49166 e5/1.50833 r/15.9917 b4/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 a/1.5 f# e/0.75 g/0.25 f#/0.5 d/1 f/0.5 b4/2.5 b/0.5 e5/0.75 g/0.25 f#/0.5 e/1 b/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 c6/1 b5/0.5 a#/1 f#/0.5 g/0.75 b/0.25 a#/0.5 a#4/1 b/0.5 b5/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/1.5 
+
+31: r/46.5083 e5/13.4917 
+
+# Track 11: channel 10 (Oboe), 2 voices
+
+32: r/40.5083 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/1.5 r/10.9917 e/0.15 r/0.85 e/0.15 r/0.85 e/0.15 r/0.35 e/0.15 r/1.35 e/0.15 r/24.85 g/0.5 b/1 g/0.5 b/1 g/0.5 c6/1 b5/0.5 a#/1 f#/0.5 g/0.75 b/0.25 a#/0.5 a#4/1 b/0.5 b5/2.5 g/0.5 b/1 g/0.5 b/1 g/0.5 d6/1 c#/0.5 c/1 g#5/0.5 c6/0.75 b5/0.25 a#/0.5 a#4/1 g5/0.5 e/1.5 
+
+33: r/48 e5/10.5 r/51 e4/25 
+
+# Track 12: channel 11 (String Ensemble 1), 2 voices
+
+34: r/40.5083 a6/0.125 g f e d c a#5 a g f# e d g6 f d# d b5 b g# b b d6 d# f g f# e d c b5 a g f# f d c f f# g f# f d c b4 a b c5 d d e/13.3667 r/28.5 b/0.125 a g f# d6 c b5 a f#6 e d c d c b5 a f#6 e d c b a g f# g f# e d b a g f# f# e d c c d f f# g f# f d c b5 a g b c6 d e f# e d c b a g f# f f# g a f# f d c f f# g a b c7 d c b6 a g f# e d c b5 d6 c b5 a f#6 e d c b a g f# b5 a g f# f#6 e d c f d c b5 f# g e f# g a b c6 d e f# g a g f e d c a#5 a g f# e d g6 f d# d b5 b g# b b d6 d# f g f# e d c b5 a g f# f d c f f# g f# f d c b4 a b c5 d d e f# g a b c6 d e f# g f# e/0.25 
+
+35: r/46.5 e5/0.25833 f#/0.125 g a b c6 d e f# g f# e/0.25 
+
+# Track 13: channel 12 (Orchestral Harp), 1 voices
+
+36: r/114.5 g5/1 b r g b r g c6 r b5 a# r b4 c5 r b4 a# r g e 
+
