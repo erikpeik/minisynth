@@ -93,7 +93,7 @@ def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	return arr
 
 def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
-	print(wave)
+	#print(wave)
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
@@ -113,7 +113,7 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("𝘾𝙧𝙚𝙖𝙩𝙞𝙣𝙜 𝙩𝙧𝙖𝙘𝙠 " + str(track_number + 1) + "...")
+	print("𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙩𝙧𝙖𝙘𝙠 𝙣𝙪𝙢𝙗𝙚𝙧 " + str(track_number + 1) + ".")
 	compiled_tracks.append(sound)
 	return sound
 
@@ -148,7 +148,7 @@ def main():
 		pool.close()
 		pool.join()
 
-		print("𝙏𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
+		print("𝘼𝙡𝙡 𝙩𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
 		count = 1
 		pygame.mixer.fadeout(1000)
 		for note_track in compiled_tracks:
