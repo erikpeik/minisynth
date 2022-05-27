@@ -68,14 +68,12 @@ notation_frequency = {
 	"d#8" : 4978.03, "eb8" : 4978.03, "e8" : 5274.04, "f8" : 5587.65, "f#8" : 5919.91,
 	"gb8" : 5919.91, "g8" : 6271.93, "g#8" : 6644.88, "ab8" : 6644.88, "a8" : 7040.00,
 	"a#8" : 7458.62, "bb8" : 7458.62 , "d8" : 7902.13,
-
-	"c" : 261.63, "c#" : 277.18, "db" : 277.18, "d" : 293.66, "d#" : 311.13,
-	"eb" : 311.13, "e" : 329.63, "f" : 349.23, "f#" : 369.99, "gb" : 369.99,
-	"g" : 392.00, "g#" : 415.30, "ab" : 415.30, "a" : 440.00, "a#" : 466.16,
-	"bb" : 466.16, "b" : 493.88,
-
 	"r" : 0
 }
+
+missing_octave = [
+	'c', 'c#', 'db', 'd', 'd#', 'eb', 'e', 'f', 'f#',
+	'gb', 'g', 'g#', 'ab', 'a', 'a#', 'bb', 'b']
 
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
 
@@ -92,16 +90,22 @@ def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	return arr
 
 def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
-	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
+	note_length = 1.0
+	latest_octave = '4'
 	for note_key in note_track:
 		if len(note_key) >= 2:
 			note_length = float(note_key[1])
-		s = np.append(s, (synthesizer
-	(notation_frequency
-	[note_key[0]], note_length * beat, wave, 0.01)))
-		dur += note_length * beat
+		if note_key[0] in missing_octave:
+			note_key[0] = note_key[0] + str(latest_octave)
+		elif note_key[0] != 'r' and note_key[0] in notation_frequency:
+			latest_octave = note_key[0][-1]
+		if note_key[0] not in notation_frequency:
+			print(note_key[0])
+		if note_key[0] in notation_frequency:
+			note = synthesizer(notation_frequency[note_key[0]], note_length * beat, wave, 0.01)
+			s = np.append(s, note)
 
 	if pb_chns == 2:
 		s = np.repeat(s[..., np.newaxis], 2, axis=1)
@@ -111,7 +115,7 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙩𝙧𝙖𝙘𝙠 𝙣𝙪𝙢𝙗𝙚𝙧 " + str(track_number + 1) + ".")
+	print("𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙩𝙧𝙖𝙘𝙠 𝙣𝙪𝙢𝙗𝙚𝙧 " + str(track_number))
 	compiled_tracks.append(sound)
 	return sound
 
@@ -124,7 +128,8 @@ def play_track(note_track, vol=0.7):
 def main():
 	if (len(sys.argv) > 1):
 
-		tracks = []
+		tracks = {}
+		track_count = 0
 		f = open(sys.argv[1])
 		for line in f.readlines():
 			if line[0] != '#' and len(line) > 1:
@@ -135,17 +140,22 @@ def main():
 				elif line[0] == "tracks":
 					track_instruments = line[1].split(',')
 				else:
+					track_count = int(line[0].replace(':', ''))
 					line.pop(0)
 					note_track = []
 					for note_key in line:
-						note_key = note_key.split('/')
-						note_track.append(note_key)
-					tracks.append(note_track)
+							note_key = note_key.split('/')
+							if note_key[0] in notation_frequency or note_key[0] in missing_octave:
+								note_track.append(note_key)
+					if track_count not in tracks:
+						tracks[track_count] = note_track
+					else:
+						tracks[track_count] += note_track
 
 		pool_size = len(tracks)
 		pool = Pool(pool_size)
-		for i in range(len(tracks)):
-			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i],))
+		for i in range(1, len(tracks) + 1):
+			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i - 1],))
 
 		pool.close()
 		pool.join()
