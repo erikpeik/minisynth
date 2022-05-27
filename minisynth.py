@@ -15,11 +15,10 @@
 #/	The synthesizer runs in a 'pygame' engine and also requires the following
 #/	libraries.
 
-import os, sys, math
+import os, sys, math, numpy as np
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
-import pygame
-import numpy as np
 from multiprocessing.pool import ThreadPool as Pool
+import pygame
 
 np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
 
@@ -29,9 +28,12 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(26) # Max number of tracks
 pygame.init()
 
-#screen = pygame.display.set_mode([500, 500])
-#font = pygame.font.SysFont('Comic Sans MS', 32)
-#pygame.display.set_caption('minisynth')
+screen = pygame.display.set_mode([500, 500])
+font = pygame.font.SysFont("Impact", 32)
+bg = pygame.image.load('img/skyline.jpeg')
+logo = pygame.image.load('img/logo.png')
+pygame.display.set_caption('minisynth')
+clock = pygame.time.Clock()
 
 #/	Note frequencies converted to global variables.
 #/	The names correspond to the western notation with "r" representing "rest".
@@ -107,10 +109,11 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 			note = synthesizer(notation_frequency[note_key[0]], note_length * beat, wave, 0.01)
 			s = np.append(s, note)
 
-	if wave == 'sine': mult = 1.0
-	if wave == 'saw': mult = 0.35
-	if wave == 'square': mult = 0.5
-	if wave == 'triangle': mult = 0.3
+	# Different multipliers for every waveform, to get volumes match more
+	if wave == 'sine': mult = 1.1
+	if wave == 'saw': mult = 0.30
+	if wave == 'square': mult = 0.40
+	if wave == 'triangle': mult = 0.15
 	vol = vol * mult
 
 	if pb_chns == 2:
@@ -157,6 +160,29 @@ def read_file(file_name):
 					tracks[track_count] += note_track
 	return tracks, beat, track_instruments
 
+cord = [19, 206]
+ofs = 1
+
+def move_logo():
+	global ofs
+	ofs += 0.02
+	if ofs > 360:
+		ofs -= 360
+	logo_cord = cord.copy()
+	logo_cord[1] += math.sin(ofs) * 2 * math.pi
+	return logo_cord
+
+def update_screen():
+	move_logo()
+	screen.fill((0,0,0))
+	screen.blit(bg, (0, 0))
+	screen.blit(logo, move_logo())
+	text = font.render('ESC will close window', False, (2, 84/2, 172/2))
+	screen.blit(text, (250 - text.get_width() / 2, 500 - (text.get_height() * 1.5) + 3))
+	text = font.render('ESC will close window', False, (2, 84, 172))
+	screen.blit(text, (250 - text.get_width() / 2, 500 - text.get_height() * 1.5))
+	pygame.display.flip()
+
 def main():
 	if (len(sys.argv) > 1):
 		(tracks, beat, track_instruments) = read_file(sys.argv[1])
@@ -181,11 +207,13 @@ def main():
 
 		running = True
 		while running:
+			update_screen()
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					running = False
 				if event.type == pygame.KEYDOWN:
 					running = False
+			clock.tick(60)
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
