@@ -1,7 +1,12 @@
 # minisynth
- The objective of this rush is to create a tool called minisynth, able to read in a specific music description file format, and to play it.
+ The objective of this rush is to create a tool called minisynth,
+ able to read in a specific music description file format, and to play it.
+
+Requirments **pygame & numpy**
 
 To install requirements:
-pip3 install -r requirements.txt
+	./minisynth install
 
-Usage: ./minisynth /path/to/song
+Usage: ./minisynth file
+
+CTRL + C will quit application.
