@@ -115,7 +115,7 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙩𝙧𝙖𝙘𝙠 𝙣𝙪𝙢𝙗𝙚𝙧 " + str(track_number))
+	print("\033[0;32mCreated track number: \033[1;32m" + str(track_number) + "\033[0m")
 	compiled_tracks.append(sound)
 	return sound
 
@@ -125,42 +125,46 @@ def play_track(note_track, vol=0.7):
 	pygame.mixer.Sound.set_volume(note_track, 0.7)
 	pygame.mixer.find_channel(True).play(note_track)
 
+def read_file(file_name):
+	tracks = {}
+	f = open(file_name)
+	for line in f.readlines():
+		if line[0] == '#':
+			print("\033[1;35m" +line + "\033[0m")
+		if line[0] != '#' and len(line) > 1:
+			line = line.split()
+			if line[0] == "tempo":
+				beats_per_minute = int(line[1])
+				beat = float(60 / beats_per_minute)
+			elif line[0] == "tracks":
+				track_instruments = line[1].split(',')
+			else:
+				track_count = int(line[0].replace(':', ''))
+				line.pop(0)
+				note_track = []
+				for note_key in line:
+						note_key = note_key.split('/')
+						if note_key[0] in notation_frequency or note_key[0] in missing_octave:
+							note_track.append(note_key)
+				if track_count not in tracks:
+					tracks[track_count] = note_track
+				else:
+					tracks[track_count] += note_track
+	return tracks, beat, track_instruments
+
 def main():
 	if (len(sys.argv) > 1):
+		(tracks, beat, track_instruments) = read_file(sys.argv[1])
 
-		tracks = {}
-		track_count = 0
-		f = open(sys.argv[1])
-		for line in f.readlines():
-			if line[0] != '#' and len(line) > 1:
-				line = line.split()
-				if line[0] == "tempo":
-					beats_per_minute = int(line[1])
-					beat = float(60 / beats_per_minute)
-				elif line[0] == "tracks":
-					track_instruments = line[1].split(',')
-				else:
-					track_count = int(line[0].replace(':', ''))
-					line.pop(0)
-					note_track = []
-					for note_key in line:
-							note_key = note_key.split('/')
-							if note_key[0] in notation_frequency or note_key[0] in missing_octave:
-								note_track.append(note_key)
-					if track_count not in tracks:
-						tracks[track_count] = note_track
-					else:
-						tracks[track_count] += note_track
-
-		pool_size = len(tracks)
-		pool = Pool(pool_size)
+		# Make pool
+		pool = Pool(len(tracks))
 		for i in range(1, len(tracks) + 1):
 			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i - 1],))
 
 		pool.close()
 		pool.join()
 
-		print("𝘼𝙡𝙡 𝙩𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
+		print("\033[1;36mAll tracks finished. Playing the compilation...\033[0m")
 		pygame.mixer.fadeout(1000)
 
 		pool_size = len(tracks)
@@ -180,7 +184,7 @@ def main():
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
-		print("𝙀𝙭𝙚𝙘𝙪𝙩𝙚 𝙬𝙞𝙩𝙝 \"python3 minisynth.py 'file.synth'\"")
+		print("\033[0;32mExecute with: \033[1;32m./minisynth file\033[0m")
 
 if __name__ == "__main__":
 	main()
