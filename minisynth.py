@@ -107,6 +107,12 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 			note = synthesizer(notation_frequency[note_key[0]], note_length * beat, wave, 0.01)
 			s = np.append(s, note)
 
+	if wave == 'sine': mult = 1.0
+	if wave == 'saw': mult = 0.35
+	if wave == 'square': mult = 0.5
+	if wave == 'triangle': mult = 0.3
+	vol = vol * mult
+
 	if pb_chns == 2:
 		s = np.repeat(s[..., np.newaxis], 2, axis=1)
 	if pb_bits == 8:
@@ -117,7 +123,6 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
 	print("\033[0;32mCreated track number: \033[1;32m" + str(track_number) + "\033[0m")
 	compiled_tracks.append(sound)
-	return sound
 
 compiled_tracks = []
 
@@ -156,19 +161,19 @@ def main():
 	if (len(sys.argv) > 1):
 		(tracks, beat, track_instruments) = read_file(sys.argv[1])
 
-		# Make pool
+		# Make a pool of processes to parse every track asynchronously.
+
 		pool = Pool(len(tracks))
 		for i in range(1, len(tracks) + 1):
 			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i - 1],))
-
 		pool.close()
 		pool.join()
 
 		print("\033[1;36mAll tracks finished. Playing the compilation...\033[0m")
 		pygame.mixer.fadeout(1000)
 
-		pool_size = len(tracks)
-		track_pool = Pool(pool_size)
+		# Play tracks asynchronously.
+		track_pool = Pool(len(tracks))
 		for note_track in compiled_tracks:
 			track_pool.apply_async(play_track, (note_track,))
 		track_pool.close()
