@@ -11,11 +11,9 @@
 # **************************************************************************** #
 
 #/	The goal of the assignment is to create a synthesizer tool called
-#/	"Minisynth" that reads and plays a musical "sheet" in a '.synthesizer
-#'
-#/	extension.
-#/	The synthesizer runs in a 'pygame' engine and also requires the libraries
-#/	'numpy', 'sys', 'threading' and 'multiprocessing'.
+#/	"Minisynth" that reads and plays a musical "sheet" in a '.synth' extension.
+#/	The synthesizer runs in a 'pygame' engine and also requires the following
+#/	libraries.
 
 import os, sys, math
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
@@ -99,7 +97,7 @@ def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 		arr = 1 - np.abs(range % 4) - 2
 	return arr
 
-def play_track(note_track, beat, track_number, vol=0.6):
+def parse_sheet(note_track, beat, track_number, vol=0.6):
 	dur = 0
 	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
 	s = np.zeros(0)
@@ -131,8 +129,8 @@ def main():
 			if line[0] != '#' and len(line) > 1:
 				line = line.split()
 				if line[0] == "tempo":
-					bpm = int(line[1])
-					beat = float(60 / bpm)
+					beats_per_minute = int(line[1])
+					beat = float(60 / beats_per_minute)
 				elif line[0] == "tracks":
 					# do something later
 					print()
@@ -147,7 +145,7 @@ def main():
 		compiled_tracks = []
 		count = 1
 		for note_track in tracks:
-			p = play_track(note_track, beat, count)
+			p = parse_sheet(note_track, beat, count)
 			count += 1
 			compiled_tracks.append(p)
 
@@ -158,7 +156,7 @@ def main():
 			note_track.play()
 			count += 1
 
-#		p = play_track(tracks[0], beat, count)
+#		p = parse_sheet(tracks[0], beat, count)
 #		p.play()
 
 		running = True
@@ -171,7 +169,7 @@ def main():
 		pygame.mixer.quit()
 		pygame.quit()
 	else:
-		print("𝙀𝙭𝙚𝙘𝙪𝙩𝙚 𝙬𝙞𝙩𝙝: python3 minisynth.py [file.synthesizer]")
+		print("𝙀𝙭𝙚𝙘𝙪𝙩𝙚 𝙬𝙞𝙩𝙝 \"python3 minisynth.py 'file.synth'\"")
 
 if __name__ == "__main__":
 	main()
