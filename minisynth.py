@@ -78,7 +78,6 @@ missing_octave = [
 	'gb', 'g', 'g#', 'ab', 'a', 'a#', 'bb', 'b']
 
 #/	The math processing for the synthesis of the sound wave, duration and frequency.
-
 def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 	range = np.arange(SAMPLERATE * duration) * frequency / SAMPLERATE
 	if wave == 'sine' or wave == 'kick' or wave == 'snare':
@@ -91,48 +90,7 @@ def synthesizer(frequency=440.0, duration=1.0, wave='sine', vol=0.01):
 		arr = 1 - np.abs(range % 4) - 2
 	return arr
 
-def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
-	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
-	s = np.zeros(0)
-	note_length = 1.0
-	latest_octave = '4'
-	for note_key in note_track:
-		if len(note_key) >= 2:
-			note_length = float(note_key[1])
-		if note_key[0] in missing_octave:
-			note_key[0] = note_key[0] + str(latest_octave)
-		elif note_key[0] != 'r' and note_key[0] in notation_frequency:
-			latest_octave = note_key[0][-1]
-		if note_key[0] not in notation_frequency:
-			print(note_key[0])
-		if note_key[0] in notation_frequency:
-			note = synthesizer(notation_frequency[note_key[0]], note_length * beat, wave, 0.01)
-			s = np.append(s, note)
-
-	# Different multipliers for every waveform, to get volumes match more
-	if wave == 'sine': mult = 1.1
-	if wave == 'saw': mult = 0.30
-	if wave == 'square': mult = 0.40
-	if wave == 'triangle': mult = 0.15
-	vol = vol * mult
-
-	if pb_chns == 2:
-		s = np.repeat(s[..., np.newaxis], 2, axis=1)
-	if pb_bits == 8:
-		snd_arr = s * vol * 127.0
-		sound = pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
-	elif pb_bits == -16:
-		snd_arr = s * vol * float((1 << 15) - 1)
-		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("\033[0;32mCreated track number: \033[1;32m" + str(track_number) + "\033[0m")
-	compiled_tracks.append(sound)
-
-compiled_tracks = []
-
-def play_track(note_track, vol=0.7):
-	pygame.mixer.Sound.set_volume(note_track, 0.7)
-	pygame.mixer.find_channel(True).play(note_track)
-
+#/ Opening file and reading and parsing everything to arrays
 def read_file(file_name):
 	tracks = {}
 	f = open(file_name)
@@ -160,6 +118,46 @@ def read_file(file_name):
 					tracks[track_count] += note_track
 	return tracks, beat, track_instruments
 
+#/ Appending notes to one long track. Fixing also missing octaves etc.
+def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
+	(pb_freq, pb_bits, pb_chns) = pygame.mixer.get_init()
+	s = np.zeros(0)
+	note_length = 1.0
+	latest_octave = '4'
+	for note_key in note_track:
+		if len(note_key) >= 2:
+			note_length = float(note_key[1])
+		if note_key[0] in missing_octave:
+			note_key[0] = note_key[0] + str(latest_octave)
+		elif note_key[0] != 'r' and note_key[0] in notation_frequency:
+			latest_octave = note_key[0][-1]
+		if note_key[0] in notation_frequency:
+			note = synthesizer(notation_frequency[note_key[0]], note_length * beat, wave, 0.01)
+			s = np.append(s, note)
+
+	#/ Different multipliers for every waveform, to get volumes match more
+	if wave == 'sine': mult = 1.0
+	if wave == 'saw': mult = 0.25
+	if wave == 'square': mult = 0.35
+	if wave == 'triangle': mult = 0.12
+	vol = vol * mult
+
+	#/ If stereo, make both channels with repeat
+	if pb_chns == 2:
+		s = np.repeat(s[..., np.newaxis], 2, axis=1)
+
+	#/ Making pygame sound array, with two different version: 8 bit or 16 bit
+	if pb_bits == 8:
+		snd_arr = s * vol * 127.0
+		sound = pygame.sndarray.make_sound(snd_arr.astype(np.uint8) + 128)
+	elif pb_bits == -16:
+		snd_arr = s * vol * float((1 << 15) - 1)
+		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
+	print("\033[0;32mCreated track number: \033[1;32m" + str(track_number) + "\033[0m")
+	compiled_tracks.append(sound)
+
+compiled_tracks = []
+
 cord = [19, 206]
 ofs = 1
 
@@ -183,12 +181,15 @@ def update_screen():
 	screen.blit(text, (250 - text.get_width() / 2, 500 - text.get_height() * 1.5))
 	pygame.display.flip()
 
+def play_track(note_track, vol=0.7):
+	pygame.mixer.Sound.set_volume(note_track, 0.7)
+	pygame.mixer.find_channel(True).play(note_track)
+
 def main():
 	if (len(sys.argv) > 1):
 		(tracks, beat, track_instruments) = read_file(sys.argv[1])
 
-		# Make a pool of processes to parse every track asynchronously.
-
+		#/ Make a pool of processes to parse every track asynchronously.
 		pool = Pool(len(tracks))
 		for i in range(1, len(tracks) + 1):
 			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i - 1],))
@@ -196,16 +197,16 @@ def main():
 		pool.join()
 
 		print("\033[1;36mAll tracks finished. Playing the compilation...\033[0m")
-		pygame.mixer.fadeout(1000)
 
-		# Play tracks asynchronously.
-		track_pool = Pool(len(tracks))
+		#/ Play tracks asynchronously.
+		pygame.mixer.set_num_channels(len(compiled_tracks))
+		track_pool = Pool(len(compiled_tracks))
 		for note_track in compiled_tracks:
 			track_pool.apply_async(play_track, (note_track,))
 		track_pool.close()
 		track_pool.join()
 
-		# Loop for pygame, waiting for your escape
+		#/ Loop for pygame, waiting for your escape
 		running = True
 		while running:
 			update_screen()
