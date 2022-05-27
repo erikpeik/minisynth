@@ -16,10 +16,12 @@
 #/	libraries.
 
 import os, sys, math
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 import pygame
 import numpy as np
+import threading
+from multiprocessing.pool import ThreadPool as Pool
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #/	Hides the community message.
 np.seterr(divide='ignore', invalid='ignore') # ignoring divide with 0
 
 SAMPLERATE = 44100
@@ -111,8 +113,11 @@ def parse_sheet(note_track, beat, track_number, vol=0.3, wave='sine'):
 	elif pb_bits == -16:
 		snd_arr = s * vol * float((1 << 15) - 1)
 		sound = pygame.sndarray.make_sound(snd_arr.astype(np.int16))
-	print("𝘾𝙧𝙚𝙖𝙩𝙞𝙣𝙜 𝙩𝙧𝙖𝙘𝙠 " + str(track_number) + "...")
+	print("𝘾𝙧𝙚𝙖𝙩𝙞𝙣𝙜 𝙩𝙧𝙖𝙘𝙠 " + str(track_number + 1) + "...")
+	compiled_tracks.append(sound)
 	return sound
+
+compiled_tracks = []
 
 def main():
 	if (len(sys.argv) > 1):
@@ -135,11 +140,13 @@ def main():
 						note_track.append(note_key)
 					tracks.append(note_track)
 
-		compiled_tracks = []
-#		for note_track in tracks:
+		pool_size = len(tracks)
+		pool = Pool(pool_size)
 		for i in range(len(tracks)):
-			p = parse_sheet(tracks[i], beat, i, 0.05, track_instruments[i])
-			compiled_tracks.append(p)
+			pool.apply_async(parse_sheet, (tracks[i], beat, i, 0.05, track_instruments[i],))
+
+		pool.close()
+		pool.join()
 
 		print("𝙏𝙧𝙖𝙘𝙠𝙨 𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙. 𝙋𝙡𝙖𝙮𝙞𝙣𝙜 𝙩𝙝𝙚 𝙘𝙤𝙢𝙥𝙞𝙡𝙖𝙩𝙞𝙤𝙣...")
 		count = 1
