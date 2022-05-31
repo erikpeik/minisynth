@@ -2,11 +2,12 @@
  The objective of this rush is to create a tool called minisynth,
  able to read in a specific music description file format, and to play it.
 
-Requirments: pygame & numpy
+# Made by: [emende](https://github.com/erikpeik) and [aviholai](https://github.com/Anviles)
 
-To install requirements:
-	./minisynth install
+Requirments: `pygame` & `numpy`
 
-Usage: ./minisynth file
+To install requirements: `./minisynth install`
 
-ESC will quit application.
+Usage: `./minisynth file`
+
+`ESC` will quit application.
